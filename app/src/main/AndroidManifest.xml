@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.karam.visitaobra">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -15,17 +16,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".PhotoActivity"></activity>
+        <activity
+            android:name=".ObraInfoActivity"
+            android:theme="@style/AppThemeNoBar" />
         <activity
             android:name=".SearchObraActivity"
-            android:label="@string/title_activity_search_obra">
-        </activity>
-
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoBar" />
         <activity
             android:name=".ObraActivity"
             android:label="" />
         <activity
             android:name=".SelectActivity"
-            android:label="" />
+            android:label=""
+            android:screenOrientation="portrait" />
         <activity
             android:name=".LoginActivity"
             android:label="AOB Login"

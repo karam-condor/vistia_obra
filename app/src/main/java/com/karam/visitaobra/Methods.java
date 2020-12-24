@@ -3,6 +3,7 @@ package com.karam.visitaobra;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,6 +32,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.database.sqlite.SQLiteDatabase;
@@ -92,6 +94,7 @@ public class Methods {
         }
         editor.commit();
     }
+
 
     //Static method that gets the shared prefrences in this app
     public  static Object getSharedPref(@NonNull Context context,@NonNull String type,@NonNull String name){
@@ -596,5 +599,19 @@ public class Methods {
         }catch (Exception ex){
             return "";
         }
+    }
+
+    public static void showDatePicker(Context context, Button btn){
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH);
+        int year = calendar.get(Calendar.YEAR);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int mYear, int mMonth, int mDay) {
+                btn.setText(mDay + "/" + mMonth + "/" + mYear);
+            }
+        },year,month,day);
+        datePickerDialog.show();
     }
 }

@@ -21,8 +21,8 @@ import java.io.Console;
 import java.util.HashMap;
 
 public class SelectActivity extends AppCompatActivity implements View.OnClickListener,TaskListener {
-    String cnpj,codusu,nomeusu;
-    Button btn_novaobra,btn_acompanhamento,btn_cnpj,btn_cancel;
+    String cnpj,codusu,nomeusu,id_obra;
+    Button btn_novaobra,btn_acompanhamento,btn_cnpj,btn_cancel,btn_pesquisa;
     EditText editTxt_cnpj;
     AlertDialog cnpjDialog;
 
@@ -33,7 +33,7 @@ public class SelectActivity extends AppCompatActivity implements View.OnClickLis
         //get cnpj,codus,nomeusu from SH
         setCnpjCodNomeUsu();
         //check cnpj, go to next activity if it is not empty
-        if(cnpj.trim().equals("")){
+        if(id_obra.trim().equals("")){
             //Prepare layout
             setLayoutConstrols();
             //set Click Listeners
@@ -69,6 +69,7 @@ public class SelectActivity extends AppCompatActivity implements View.OnClickLis
     private void setLayoutConstrols() {
         btn_novaobra = findViewById(R.id.select_novaobra_button);
         btn_acompanhamento = findViewById(R.id.select_acompanhamento_button);
+        btn_pesquisa = findViewById(R.id.select_pesquisa_button);
     }
 
     private View setCnpjDialogControls(){
@@ -85,12 +86,14 @@ public class SelectActivity extends AppCompatActivity implements View.OnClickLis
     private void setOnClickListeners(){
         btn_novaobra.setOnClickListener(this);
         btn_acompanhamento.setOnClickListener(this);
+        btn_pesquisa.setOnClickListener(this);
     }
 
     private void setCnpjCodNomeUsu(){
         codusu = (String)Methods.getSharedPref(this,"string",getString(R.string.sh_login_cod_usu));
         nomeusu = (String)Methods.getSharedPref(this,"string",getString(R.string.sh_login_nome_usu));
         cnpj = (String) Methods.getSharedPref(this,"string",getString(R.string.sh_cnpj));
+        id_obra = (String) Methods.getSharedPref(this,"string",getString(R.string.sh_id_obra));
     }
 
     @Override
@@ -104,20 +107,22 @@ public class SelectActivity extends AppCompatActivity implements View.OnClickLis
                 cnpjDialog.show();
                 break;
             case R.id.select_acompanhamento_button:
-
+                goToSearchObra(true); //true insert
+                break;
+            case R.id.select_pesquisa_button:
+                goToSearchObra(false); //false search
                 break;
             case R.id.insertCnpj_button:
                 if(cnpjDialog != null){
                     cnpjDialog.dismiss();
                 }
-                Methods.showLoadingDialog(this);
                 cnpj = String.valueOf(editTxt_cnpj.getText()).trim();
                 if(!cnpj.equals("") && cnpj.length() == 14){
                     Methods.showLoadingDialog(this);
                     GoogleLocation.requestSingleUpdate(this, new GoogleLocation.LocationCallback() {
                         @Override
                         public void onNewLocationAvailable(GoogleLocation.GPSCoordinates location) {
-                            HashMap<String, String> map = Methods.stringToHashMap("LAT%LONGT%CODUSU%NOMEUSU",String.valueOf(location.latitude),String.valueOf(location.longitude),codusu,nomeusu );
+                            HashMap<String, String> map = Methods.stringToHashMap("LAT%LONGT%CODUSU%NOMEUSU%CNPJ",String.valueOf(location.latitude),String.valueOf(location.longitude),codusu,nomeusu,cnpj);
                             String encodedParams = "";
                             try {
                                 encodedParams = Methods.encode(map);
@@ -137,6 +142,12 @@ public class SelectActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    private void goToSearchObra(boolean searchOrNew){
+        Intent searchObraIntent = new Intent(SelectActivity.this,SearchObraActivity.class);
+        searchObraIntent.putExtra("searchOrNew",searchOrNew); // 0 insert
+        startActivity(searchObraIntent);
+    }
+
 
     @Override
     public void onTaskFinish(String response) {
@@ -146,7 +157,7 @@ public class SelectActivity extends AppCompatActivity implements View.OnClickLis
             String id_obra = String.valueOf(responseMap.get("id_obra")).trim();
             if (!id.matches("") && !id_obra.matches("")) {
                 Intent obraIntent = new Intent(SelectActivity.this, ObraActivity.class);
-                obraIntent.putExtra("isNew", true);
+                Methods.setSharedPref(this, "boolean", getString(R.string.sh_is_new), true);
                 Methods.setSharedPref(this, "string", getString(R.string.sh_cnpj), cnpj);
                 Methods.setSharedPref(this, "string", getString(R.string.sh_id_visita), id);
                 Methods.setSharedPref(this, "string", getString(R.string.sh_id_obra), id_obra);

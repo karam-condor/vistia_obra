@@ -1,46 +1,14 @@
 package com.karam.visitaobra;
 
 public class Obra {
-    private String cliente;
-    private String emprendedor;
-    private String uf;
-    private String cidade;
-    private String endereco;
-    private String bairro;
-    private String almox;
-    private String engenheiro;
-    private String telefone1;
-    private String telefone2;
-    private String telefone3;
-    private String cnpj;
 
-    public String getDtultimavisita() {
-        return dtultimavisita;
+
+    public String getId() {
+        return id;
     }
 
-    public void setDtultimavisita(String dtultimavisita) {
-        this.dtultimavisita = dtultimavisita;
-    }
-
-    private String dtultimavisita;
-    private double lat,longt;
-
-    public Obra(String cliente, String emprendedor, String uf, String cidade, String endereco, String bairro, String almox, String engenheiro, String telefone1, String telefone2, String telefone3, String cnpj, double lat, double longt,String dtultimavisita) {
-        this.cliente = cliente;
-        this.emprendedor = emprendedor;
-        this.uf = uf;
-        this.cidade = cidade;
-        this.endereco = endereco;
-        this.bairro = bairro;
-        this.almox = almox;
-        this.engenheiro = engenheiro;
-        this.telefone1 = telefone1;
-        this.telefone2 = telefone2;
-        this.telefone3 = telefone3;
-        this.cnpj = cnpj;
-        this.lat = lat;
-        this.longt = longt;
-        this.dtultimavisita = dtultimavisita;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getCliente() {
@@ -154,4 +122,52 @@ public class Obra {
     public void setLongt(double longt) {
         this.longt = longt;
     }
+
+    private String id;
+    private String cliente;
+    private String emprendedor;
+    private String uf;
+    private String cidade;
+    private String endereco;
+    private String bairro;
+    private String almox;
+    private String engenheiro;
+    private String telefone1;
+    private String telefone2;
+    private String telefone3;
+    private String cnpj;
+
+    public String getDtultimavisita() {
+        return dtultimavisita;
+    }
+
+    public void setDtultimavisita(String dtultimavisita) {
+        this.dtultimavisita = dtultimavisita;
+    }
+
+    private String dtultimavisita;
+    private double lat,longt;
+
+    public Obra(String id,String cliente, String emprendedor, String uf, String cidade, String endereco, String bairro, String almox, String engenheiro, String telefone1, String telefone2, String telefone3, String cnpj, double lat, double longt,String dtultimavisita) {
+        this.id = id;
+        this.cliente = cliente;
+        this.emprendedor = emprendedor;
+        this.uf = uf;
+        this.cidade = cidade;
+        this.endereco = endereco;
+        this.bairro = bairro;
+        this.almox = almox;
+        this.engenheiro = engenheiro;
+        this.telefone1 = telefone1;
+        this.telefone2 = telefone2;
+        this.telefone3 = telefone3;
+        this.cnpj = cnpj;
+        this.lat = lat;
+        this.longt = longt;
+        this.dtultimavisita = dtultimavisita;
+    }
+
+    public Obra(){
+    }
+
 }
