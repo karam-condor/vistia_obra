@@ -39,8 +39,10 @@ public class SelectActivity extends AppCompatActivity implements View.OnClickLis
             //set Click Listeners
             setOnClickListeners();
         }else{
+            Methods.showLoadingDialog(this);
             Intent obraIntent = new Intent(SelectActivity.this,ObraActivity.class);
             startActivity(obraIntent);
+            Methods.closeLoadingDialog();
             finish();
         }
     }

@@ -2,6 +2,7 @@ package com.karam.visitaobra;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.Manifest;
 import android.content.Intent;
@@ -29,6 +30,7 @@ import java.util.zip.Inflater;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener,TaskListener {
     String codusu,nomeusu;
     Button button_login;
+    CardView login_cardVw;
     TextInputEditText editText_login;
     RelativeLayout layout_login_master;
     @Override
@@ -42,7 +44,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //check googleplay services availability
         if(Methods.checkPlayServices(this,this)){
             Dexter.withContext(this).withPermissions(Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION
-            ,Manifest.permission.CAMERA,Manifest.permission.ACCESS_NETWORK_STATE).withListener(new MultiplePermissionsListener() {
+            ,Manifest.permission.CAMERA,Manifest.permission.ACCESS_NETWORK_STATE,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE).withListener(new MultiplePermissionsListener() {
                 @Override
                 public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
                     //check is logged
@@ -51,6 +53,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     if(!codusu.trim().equals("")){
                         callNextActivity();
                     }else{
+                        showHideCardVw(View.VISIBLE);
                         enableControls();
                         setClickListeners();
                     }
@@ -76,6 +79,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         button_login = findViewById(R.id.login_login_button);
         editText_login = findViewById(R.id.login_codusu_editText);
         layout_login_master = findViewById(R.id.login_layout_master);
+        login_cardVw = findViewById(R.id.login_login_cardVw);
     }
 
     private void enableControls() {
@@ -88,9 +92,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         nomeusu = (String)Methods.getSharedPref(this,"string",getString(R.string.sh_login_nome_usu));
     }
 
+    private void showHideCardVw(int visibility){
+        login_cardVw.setVisibility(visibility);
+    }
+
     private void callNextActivity() {
+        Methods.showLoadingDialog(this);
         Intent NovaObraIntent = new Intent(LoginActivity.this,SelectActivity.class);
         startActivity(NovaObraIntent);
+        Methods.closeLoadingDialog();
         finish();
     }
 

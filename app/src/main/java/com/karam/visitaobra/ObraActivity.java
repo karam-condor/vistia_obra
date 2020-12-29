@@ -5,9 +5,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -40,6 +42,7 @@ public class ObraActivity extends AppCompatActivity implements TaskListener{
     String fase_obra = "";
     String obs = "";
     int photo_seq = 0;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
     Spinner ufSpinner,cidadeSpinner;
     TextInputEditText cliente_editTxt,empren_editTxt,bairro_editTxt,end_EditTxt,amox_EditTxt,eng_EditTxt,tele1_EditTxt,tele2_EditTxt,tele3_EditTxt;
     boolean isNew =true;
@@ -83,7 +86,8 @@ public class ObraActivity extends AppCompatActivity implements TaskListener{
                 updateAll();
                 return true;
             case R.id.obra_fotos_menu:
-                takePhoto();
+                Intent intent = new Intent(this,PhotoActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.obra_finalizar_menu:
                 AlertDialog dialog = new AlertDialog.Builder(this)
@@ -111,20 +115,9 @@ public class ObraActivity extends AppCompatActivity implements TaskListener{
         }
     }
 
-    private void takePhoto() {
-        String filename = id_obra + "-" + id + photo_seq;
-        File storageDirectory = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        try {
-            File imageFile = File.createTempFile(filename,".jpg",storageDirectory);
-            String currentPhotoPath = imageFile.getAbsolutePath();
-            Uri imgUri = FileProvider.getUriForFile(this,"com.karam.visitaobra.fileprovider",imageFile);
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT,imgUri);
-            startActivityForResult(intent,1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
+
+
 
     private void setLayoutControls() {
         cliente_editTxt = findViewById(R.id.obra_cliente_editTxt);

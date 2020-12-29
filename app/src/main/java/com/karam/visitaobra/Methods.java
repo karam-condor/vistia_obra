@@ -24,6 +24,7 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Gravity;
@@ -49,6 +50,8 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -405,7 +408,13 @@ public class Methods {
         return base64;
     }
 
-
+    public static String getBase64FromImage(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream .toByteArray();
+        String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        return  encoded;
+    }
 
     public static float roundFloat(float d, int decimalPlace) {
         BigDecimal bd = new BigDecimal(Float.toString(d));
@@ -464,16 +473,21 @@ public class Methods {
 
 
     public static void showLoadingDialog(Context context){
-        loadingDialog = new AlertDialog.Builder(context)
-                .setView(R.layout.loading_layout)
-                .setCancelable(false)
-                .create();
-        loadingDialog.show();
+        if(loadingDialog == null){
+            loadingDialog = new AlertDialog.Builder(context)
+                    .setView(R.layout.loading_layout)
+                    .setCancelable(false)
+                    .create();
+            loadingDialog.show();
+        }
     }
 
 
     public static void closeLoadingDialog(){
-        loadingDialog.dismiss();
+        if(loadingDialog != null){
+            loadingDialog.dismiss();
+            loadingDialog = null;
+        }
     }
 
 
@@ -613,5 +627,11 @@ public class Methods {
             }
         },year,month,day);
         datePickerDialog.show();
+    }
+
+    public static int[] getScreenSize(Activity activity){
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return new int[]{displayMetrics.widthPixels,displayMetrics.heightPixels};
     }
 }
